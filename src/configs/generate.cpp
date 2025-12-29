@@ -494,15 +494,13 @@ namespace Configs {
             if (dataStore->vpn_ipv6) tunAddress += "fdfe:dcba:9876::1/96";
             inboundObj["address"] = tunAddress;
 
-            if (ctx->buildPrerequisities->routingDeps->defaultOutboundID == proxyID && dataStore->enable_tun_routing)
-            {
-                QJsonArray routeExcludeAddrs = {"127.0.0.0/8"};
-                QJsonArray routeExcludeSets;
-                for (auto item: tunDeps->directIPCIDRs) routeExcludeAddrs << item;
-                for (auto item: tunDeps->directIPSets) routeExcludeSets << item;
-                inboundObj["route_exclude_address"] = routeExcludeAddrs;
-                if (!routeExcludeSets.isEmpty()) inboundObj["route_exclude_address_set"] = routeExcludeSets;
-            }
+            QJsonArray routeExcludeAddrs = {"127.0.0.0/8", "10.10.10.0/24","10.127.0.0/24"};
+            QJsonArray routeExcludeSets;
+            for (auto item: tunDeps->directIPCIDRs) routeExcludeAddrs << item;
+            for (auto item: tunDeps->directIPSets) routeExcludeSets << item;
+            inboundObj["route_exclude_address"] = routeExcludeAddrs;
+            if (!routeExcludeSets.isEmpty()) inboundObj["route_exclude_address_set"] = routeExcludeSets;
+            
             inbounds += inboundObj;
         }
 
